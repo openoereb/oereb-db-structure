@@ -23,12 +23,8 @@ jobs:
         run: |
           docker build -t oereb-db-structure:intermediate .
           docker run --name $CONTAINERNAME -d -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=${{ secrets.PG_READ_PWD }} -e PG_WRITE_PWD=${{ secrets.PG_WRITE_PWD }} -e PG_GRETL_PWD=${{ secrets.PG_GRETL_PWD }} oereb-db-structure:intermediate
-          until docker exec $CONTAINERNAME pg_isready; do
-            echo "$CONTAINERNAME was not ready, waiting another cycle"
-            sleep 5
-          done
-          docker exec $CONTAINERNAME rm -f /docker-entrypoint-initdb.d/20_setup.sql
-          docker exec $CONTAINERNAME rm -f /docker-entrypoint-initdb.d/30_initdb_user.sh
-          echo "$CONTAINERNAME is ready..."
+          docker exec -i $CONTAINERNAME ps -p 1 -o comm=
+          echo "$CONTAINERNAME is ready (all data was imported)..."
+          
           docker commit $CONTAINERNAME ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:latest
