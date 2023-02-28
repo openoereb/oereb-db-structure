@@ -1,0 +1,32 @@
+name: 'Build oereb-db-structure'
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build
+        env:
+          CONTAINERNAME: oereb-db-structure-intermediate
+        run: |
+          docker build -t oereb-db-structure:intermediate .
+          docker run --name $CONTAINERNAME --rm -d oereb-db-structure:intermediate
+          until docker exec $CONTAINERNAME pg_isready; do
+            echo "$CONTAINERNAME was not ready, waiting another cycle"
+            sleep 5
+          done
+          echo "$CONTAINERNAME is ready..."
+          docker commit $CONTAINERNAME ghcr.io/${{ github.repository }}:latest
+          docker push ghcr.io/${{ github.repository }}:latest
