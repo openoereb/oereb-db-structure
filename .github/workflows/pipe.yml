@@ -27,6 +27,8 @@ jobs:
             echo "$CONTAINERNAME was not ready, waiting another cycle"
             sleep 5
           done
+          docker exec $CONTAINERNAME rm -f /docker-entrypoint-initdb.d/20_setup.sql
+          docker exec $CONTAINERNAME rm -f /docker-entrypoint-initdb.d/30_initdb_user.sh
           echo "$CONTAINERNAME is ready..."
           docker commit $CONTAINERNAME ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:latest
