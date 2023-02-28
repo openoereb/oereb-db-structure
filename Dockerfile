@@ -13,3 +13,6 @@ RUN curl -o /tmp/ili2pg-${ILI2PG_VERSION}.zip https://downloads.interlis.ch/ili2
     unzip -d /ili2pg /tmp/ili2pg-${ILI2PG_VERSION}.zip && \
     chmod -R ogu+rwx /ili2pg/* && \
     rm -rf /tmp/ili2pg-${ILI2PG_VERSION}.zip
+
+RUN rm -f /docker-entrypoint-initdb.d/20_setup.sql && \
+    rm -f /docker-entrypoint-initdb.d/30_initdb_user.sh
