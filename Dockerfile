@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     curl \
     make \
-    git
+    git \
+    procps
 
 ARG ILI2PG_VERSION=4.9.1
 RUN curl -o /tmp/ili2pg-${ILI2PG_VERSION}.zip https://downloads.interlis.ch/ili2pg/ili2pg-${ILI2PG_VERSION}.zip && \
