@@ -22,9 +22,7 @@ jobs:
           CONTAINERNAME: database
         run: |
           docker build -t oereb-db-structure:intermediate .
-          docker run --name $CONTAINERNAME -d -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=${{ secrets.PG_READ_PWD }} -e PG_WRITE_PWD=${{ secrets.PG_WRITE_PWD }} -e PG_GRETL_PWD=${{ secrets.PG_GRETL_PWD }} oereb-db-structure:intermediate
-          echo "waiting 30 seconds before db is initially ready"
-          sleep 30
+          docker run --name $CONTAINERNAME -d -v /tmp/pd_data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} -e POSTGRES_HOST_AUTH_METHOD=md5 -e PG_READ_PWD=${{ secrets.PG_READ_PWD }} -e PG_WRITE_PWD=${{ secrets.PG_WRITE_PWD }} -e PG_GRETL_PWD=${{ secrets.PG_GRETL_PWD }} oereb-db-structure:intermediate
           until [ $(docker exec -i $CONTAINERNAME ps -p 1 -o comm=) = "postgres" ]; do
             echo "$CONTAINERNAME was not ready, waiting another cycle"
             sleep 5

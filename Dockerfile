@@ -1,5 +1,7 @@
 FROM ghcr.io/oereb/oereb-db:2
 
+ENV PGDATA=/pg_data
+
 RUN apt-get update && apt-get install -y \
     default-jdk \
     unzip \
