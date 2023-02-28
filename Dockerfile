@@ -11,4 +11,5 @@ ARG ILI2PG_VERSION=4.9.1
 RUN curl -o /tmp/ili2pg-${ILI2PG_VERSION}.zip https://downloads.interlis.ch/ili2pg/ili2pg-${ILI2PG_VERSION}.zip && \
     mkdir /ili2pg && \
     unzip -d /ili2pg /tmp/ili2pg-${ILI2PG_VERSION}.zip && \
-    chmod -R ogu+rwx /ili2pg/*
+    chmod -R ogu+rwx /ili2pg/* && \
+    rm -rf /tmp/ili2pg-${ILI2PG_VERSION}.zip
