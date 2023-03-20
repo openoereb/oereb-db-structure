@@ -28,6 +28,7 @@ jobs:
             sleep 5
           done
           echo "$CONTAINERNAME is ready (all data was imported)..."
+          docker container stop docker container stop
           
           docker commit $CONTAINERNAME ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:latest
